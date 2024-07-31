@@ -2,37 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using callbackcontext = UnityEngine.InputSystem.InputAction.CallbackContext;
+
 
 public class Movimiento : MonoBehaviour
 {
     [SerializeField] private Animator anim;
-    [SerializeField] private Vector3 motionDebug;
+    [SerializeField] private Suavizar motionVector;
 
 
     private int velocityxid;
-        private int velyid;
-
- #if UNITY_EDITOR
-   private void OnValidate()
- {
-        movimiento(motionDebug);
+    private int velyid;
+    public void movimiento(callbackcontext ctx)
+    {
+        Vector2 direction = ctx.ReadValue<Vector2>();
+        motionVector.TargetValue = direction;
+       
     }
-#endif
+
 
     private void Awake()
     {
-       velocityxid = Animator.StringToHash( "velocity x");
-        velyid = Animator.StringToHash( "vely");
+        velocityxid = Animator.StringToHash("velocity x");
+        velyid = Animator.StringToHash("vely");
+    }
+    private void Update()
+    {
+        motionVector.update();
+        Vector2 direction = motionVector.CurrentValue;
+        anim.SetFloat("velocity x", direction.x);
+        anim.SetFloat("vel y", direction.y);
     }
 
-  
-    void Update()
-    {
-        
-    }
-    public void movimiento(Vector3 motionDirection)
-    {
-        anim.SetFloat("velocity x", motionDirection.x);
-        anim.SetFloat("vel y", motionDirection.x);
-    }
+
 }
+
+
+
+
+  
