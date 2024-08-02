@@ -8,7 +8,7 @@ using callbackcontext = UnityEngine.InputSystem.InputAction.CallbackContext;
 public class Movimiento : MonoBehaviour
 {
     [SerializeField] private Animator anim;
-    [SerializeField] private Suavizar motionVector;
+    [SerializeField] private Suavizar motionVector = new Suavizar (true);
 
 
     private int velocityxid;
@@ -19,7 +19,12 @@ public class Movimiento : MonoBehaviour
         motionVector.TargetValue = direction;
        
     }
-
+    public void ToggleSprint(callbackcontext ctx)
+    {
+        bool val = ctx.ReadValueAsButton();
+        motionVector.Clamp = !val;
+    }
+        
 
     private void Awake()
     {
