@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using callbackcontext = UnityEngine.InputSystem.InputAction.CallbackContext;
@@ -8,6 +9,7 @@ using callbackcontext = UnityEngine.InputSystem.InputAction.CallbackContext;
 public class Movimiento : MonoBehaviour
 {
     [SerializeField] private Animator anim;
+    [SerializeField] private Transform CameraTransform;
     [SerializeField] private Suavizar motionVector = new Suavizar (true);
 
 
@@ -38,7 +40,17 @@ public class Movimiento : MonoBehaviour
         anim.SetFloat("velocity x", direction.x);
         anim.SetFloat("vel y", direction.y);
     }
+    private void OnAnimatorMove()
+    {
+        anim.ApplyBuiltinRootMotion();
+        float interpolator =Mathf.Abs( Vector3.Dot(CameraTransform.forward, transform.up)); 
 
+        Vector3 forward = Vector3.Lerp(CameraTransform.forward,CameraTransform.up, interpolator);
+        Vector3 projected = Vector3.ProjectOnPlane(forward, transform.up);
+        Quaternion rotation = quaternion.LookRotation(projected, transform.up);
+        anim.rootRotation = Quaternion.Slerp(anim.rootRotation,  rotation, motionVector.CurrentValue.magnitude);
+        anim.ApplyBuiltinRootMotion();
+    }
 
 }
 

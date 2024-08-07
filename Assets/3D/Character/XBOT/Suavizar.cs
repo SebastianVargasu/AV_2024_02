@@ -13,8 +13,9 @@ public struct Suavizar
     [SerializeField] private float smoothTime;
     [SerializeField] private float clampMagnitude;
     [SerializeField] private bool clamp;
+
     
-  
+   
 
     public void update()
     {
