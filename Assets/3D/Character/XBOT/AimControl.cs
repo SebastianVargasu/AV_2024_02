@@ -10,6 +10,7 @@ public class AimControl : MonoBehaviour
     [SerializeField] private AimConstraint chestAim;
     [SerializeField] private Transform aimRig;
     [SerializeField] private Suavizar LookVector;
+    
 public void Aim(InputAction ctx
     )  
     {
@@ -32,6 +33,7 @@ public void Aim(InputAction ctx
     private void Awake()
     {
         aimRig.gameObject.SetActive(false);
+        
     }
 
 }
